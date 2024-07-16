@@ -1,6 +1,6 @@
 import os
 import torch
-from data import train_dataloader
+from data import train_dataloader2
 from utils import Adder, Timer, check_lr
 from torch.utils.tensorboard import SummaryWriter
 from valid import _valid
@@ -14,7 +14,7 @@ def _train(model, args):
     criterion = torch.nn.L1Loss()
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, betas=(0.9, 0.999), eps=1e-8)
-    dataloader = train_dataloader(args.data_dir, args.batch_size, args.num_worker)
+    dataloader = train_dataloader2(args.data_dir, args.batch_size, args.num_worker)
     max_iter = len(dataloader)
     warmup_epochs=1
     scheduler_cosine = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=args.num_epoch-warmup_epochs, eta_min=1e-6)

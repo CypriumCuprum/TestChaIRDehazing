@@ -1,6 +1,6 @@
 import torch
 from torchvision.transforms import functional as F
-from data import valid_dataloader
+from data import valid_dataloader2
 from utils import Adder
 import os
 from skimage.metrics import peak_signal_noise_ratio
@@ -9,7 +9,7 @@ import torch.nn.functional as f
 
 def _valid(model, args, ep):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    ots = valid_dataloader(args.data_dir, batch_size=1, num_workers=0)
+    ots = valid_dataloader2(args.data_dir, batch_size=1, num_workers=0)
     model.eval()
     psnr_adder = Adder()
 

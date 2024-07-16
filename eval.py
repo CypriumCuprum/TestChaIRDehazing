@@ -3,7 +3,7 @@ import torch
 from torchvision.transforms import functional as F
 import numpy as np
 from utils import Adder
-from data import test_dataloader
+from data import test_dataloader2
 from skimage.metrics import peak_signal_noise_ratio
 import time
 from pytorch_msssim import ssim
@@ -16,7 +16,7 @@ def _eval(model, args):
     state_dict = torch.load(args.test_model)
     model.load_state_dict(state_dict['model'])
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    dataloader = test_dataloader(args.data_dir, batch_size=1, num_workers=0)
+    dataloader = test_dataloader2(args.data_dir, batch_size=1, num_workers=0)
     torch.cuda.empty_cache()
     adder = Adder()
     model.eval()
