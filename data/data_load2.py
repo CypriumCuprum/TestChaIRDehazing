@@ -50,7 +50,7 @@ import random
 
 
 class DeblurDataset(Dataset):
-    def __init__(self, image_dir, transform=None, is_test=False, ps=None):
+    def __init__(self, image_dir, transform=None, is_test=False, is_valid=False, ps=None):
         self.image_dir = image_dir
         self.ref_list = os.listdir(os.path.join(self.image_dir, 'ref_imgs'))
         self.image_list = []
@@ -60,6 +60,7 @@ class DeblurDataset(Dataset):
         self.image_list.sort()
         self.transform = transform
         self.is_test = is_test
+        self.is_valid = is_valid
         self.ps = ps
 
     def get_img_path(self):
