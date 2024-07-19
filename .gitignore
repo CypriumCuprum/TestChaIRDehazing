@@ -2,4 +2,8 @@ __pycache__
 .idea
 runs
 data.zip
-
+resultkaggle.zip
+results
+log
+predictAQI.py
+rs.json

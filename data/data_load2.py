@@ -8,6 +8,17 @@ from PIL import ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
+def dataloadsvm(path, batch_size=4, num_workers=0, phase="train"):
+    image_dir = os.path.join(path, phase)
+    dataloader = DataLoader(
+        DeblurDataset(image_dir, is_test=True),
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        pin_memory= False
+    )
+    return dataloader
+
 
 def train_dataloader2(path, batch_size=64, num_workers=0):
     image_dir = os.path.join(path, 'train')
@@ -25,24 +36,23 @@ def train_dataloader2(path, batch_size=64, num_workers=0):
 def test_dataloader2(path, batch_size=1, num_workers=0):
     image_dir = os.path.join(path, 'test')
     dataloader = DataLoader(
-        DeblurDataset(path, is_test=True),
+        DeblurDataset(image_dir, is_test=True),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers,
         pin_memory=True
     )
-
     return dataloader
 
 
 def valid_dataloader2(path, batch_size=1, num_workers=0):
+    image_dir = os.path.join(path, 'valid')
     dataloader = DataLoader(
-        DeblurDataset(os.path.join(path, 'test'), is_valid=True),
+        DeblurDataset(image_dir, is_valid=True),
         batch_size=batch_size,
         shuffle=False,
         num_workers=num_workers
     )
-
     return dataloader
 
 
@@ -68,8 +78,8 @@ class DeblurDataset(Dataset):
         for ref_name in self.ref_list:
             haze_name = ref_name.split(".")[0] + "_synt.jpg"
             fullpath_ref = os.path.join(self.image_dir, "ref_imgs", ref_name)
-            for dir in namehazedir:
-                fullpath_haze = os.path.join(self.image_dir, dir, haze_name)
+            for direct in namehazedir:
+                fullpath_haze = os.path.join(self.image_dir, direct, haze_name)
                 self.image_list.append((fullpath_ref, fullpath_haze))
 
 
@@ -101,8 +111,9 @@ class DeblurDataset(Dataset):
             label = F.to_tensor(label)
 
         if self.is_test:
-            name = os.path.basename(self.image_list[idx][1]) + os.path.split(self.image_list[idx][1])[-2]
-            # name = self.image_list[idx]
+            parentpath = self.image_list[idx][1].split("\\")[-2]
+            filename = self.image_list[idx][1].split("\\")[-1].split(".")[0]
+            name = filename + parentpath + ".jpg"
             return image, label, name
         return image, label
 
