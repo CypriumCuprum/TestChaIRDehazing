@@ -108,22 +108,22 @@ def _train(model, args):
             if iter_idx%eval_now==0 and iter_idx>0 and (epoch_idx>20 or epoch_idx == 1):
 
                 save_name = os.path.join(args.model_save_dir, 'model_%d_%d.pkl' % (epoch_idx, iter_idx))
-                torch.save({'model': model.state_dict()}, save_name)
+                torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, save_name)
 
                 val_gopro = _valid(model, args, epoch_idx)
                 print('%03d epoch \n Average GOPRO PSNR %.2f dB' % (epoch_idx, val_gopro))
                 writer.add_scalar('PSNR_GOPRO', val_gopro, epoch_idx)
                 if val_gopro >= best_psnr:
-                    torch.save({'model': model.state_dict()}, os.path.join(args.model_save_dir, 'Best.pkl'))
+                    torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, os.path.join(args.model_save_dir, 'Best.pkl'))
 
 
         overwrite_name = os.path.join(args.model_save_dir, 'model.pkl')
-        torch.save({'model': model.state_dict()}, overwrite_name)
+        torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, overwrite_name)
 
 
         if epoch_idx % args.save_freq == 0:
             save_name = os.path.join(args.model_save_dir, 'model_%d.pkl' % epoch_idx)
-            torch.save({'model': model.state_dict()}, save_name)
+            torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, save_name)
         print("EPOCH: %02d\nElapsed time: %4.2f Epoch Pixel Loss: %7.4f Epoch FFT Loss: %7.4f" % (
             epoch_idx, epoch_timer.toc(), epoch_pixel_adder.average(), epoch_fft_adder.average()))
         epoch_fft_adder.reset()
@@ -135,6 +135,6 @@ def _train(model, args):
             print('%03d epoch \n Average PSNR %.2f dB' % (epoch_idx, val))
             writer.add_scalar('PSNR', val, epoch_idx)
             if val >= best_psnr:
-                torch.save({'model': model.state_dict()}, os.path.join(args.model_save_dir, 'Best.pkl'))
+                torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, os.path.join(args.model_save_dir, 'Best.pkl'))
     save_name = os.path.join(args.model_save_dir, 'Final.pkl')
-    torch.save({'model': model.state_dict()}, save_name)
+    torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, save_name)
