@@ -159,7 +159,7 @@ def train_svm(args):
 
     X_train, y_train, X_valid, y_valid = rstrain[:, 0].reshape(-1, 1), rstrain[:, 1], rsvalid[:, 0].reshape(-1, 1), rsvalid[:, 1]
 
-    clf = SVC(gamma="auto")
+    clf = SVC(gamma="auto", kernel="linear")
     clf.fit(X_train, y_train)
 
     with open(os.path.join(args.result_dir, "clf", "classifier.pkl"), "wb") as fil:

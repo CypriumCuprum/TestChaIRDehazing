@@ -107,8 +107,8 @@ def _train(model, args):
 
             if iter_idx%eval_now==0 and iter_idx>0 and (epoch_idx>20 or epoch_idx == 1):
 
-                save_name = os.path.join(args.model_save_dir, 'model_%d_%d.pkl' % (epoch_idx, iter_idx))
-                torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, save_name)
+                # save_name = os.path.join(args.model_save_dir, 'model_%d_%d.pkl' % (epoch_idx, iter_idx))
+                # torch.save({'model': model.state_dict(), 'epoch': epoch_idx, 'optimizer': optimizer.state_dict()}, save_name)
 
                 val_gopro = _valid(model, args, epoch_idx)
                 print('%03d epoch \n Average GOPRO PSNR %.2f dB' % (epoch_idx, val_gopro))
