@@ -13,6 +13,7 @@ from warmup_scheduler import GradualWarmupScheduler
 def _train(model, args):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     criterion = torch.nn.L1Loss()
+    criterion = criterion.to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, betas=(0.9, 0.999), eps=1e-8)
     dataloader = train_dataloader2(args.data_dir, args.batch_size, args.num_worker)
