@@ -18,11 +18,11 @@ def _train(model, args):
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, betas=(0.9, 0.999), eps=1e-8)
 
-    if torch.cuda.device_count() > 1:
-        cudnn.benchmark = True
-        print("Let's use", torch.cuda.device_count(), "GPUs!")
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-        model = nn.DataParallel(model).cuda()
+    # if torch.cuda.device_count() > 1:
+    #     cudnn.benchmark = True
+    #     print("Let's use", torch.cuda.device_count(), "GPUs!")
+    #     # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+    #     model = nn.DataParallel(model).cuda()
     model.train()
     dataloader = train_dataloader2(args.data_dir, args.batch_size, args.num_worker)
     max_iter = len(dataloader)
@@ -59,8 +59,8 @@ def _train(model, args):
         for iter_idx, batch_data in enumerate(dataloader):
 
             input_img, label_img = batch_data
-            input_img = input_img.cuda()
-            label_img = label_img.cuda()
+            input_img = input_img.to(device)
+            label_img = label_img.to(device)
 
             optimizer.zero_grad()
             pred_img = model(input_img)
