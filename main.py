@@ -25,10 +25,13 @@ def main(args):
     model = build_net()
     # print(model)
 
-
-    if torch.cuda.is_available():
+    if torch.cuda.device_count() > 1:
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
         model = DataParallel(model)
-        # model.cuda()
+
+    # if torch.cuda.is_available():
+    #     model.cuda()
     if args.mode == 'train':
         _train(model, args)
 
