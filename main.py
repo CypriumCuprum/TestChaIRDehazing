@@ -24,10 +24,11 @@ def main(args):
 
     model = build_net()
     # print(model)
-    model = DataParallel(model)
+
 
     if torch.cuda.is_available():
-        model.cuda()
+        model = DataParallel(model)
+        # model.cuda()
     if args.mode == 'train':
         _train(model, args)
 
