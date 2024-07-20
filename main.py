@@ -7,6 +7,7 @@ from train import _train
 from eval import _eval
 import numpy as np
 import random
+from torch.nn import DataParallel
 
 def main(args):
     # CUDNN
@@ -22,7 +23,8 @@ def main(args):
         os.makedirs(args.result_dir)
 
     model = build_net()
-    print(model)
+    # print(model)
+    model = DataParallel(model)
 
     if torch.cuda.is_available():
         model.cuda()
