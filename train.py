@@ -6,6 +6,7 @@ from torch.utils.tensorboard import SummaryWriter
 from valid import _valid
 import torch.nn.functional as F
 import torch.nn as nn
+import torch.backends.cudnn as cudnn
 
 from warmup_scheduler import GradualWarmupScheduler
 
@@ -16,6 +17,12 @@ def _train(model, args):
     criterion = criterion.to(device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.learning_rate, betas=(0.9, 0.999), eps=1e-8)
+
+    if torch.cuda.device_count() > 1:
+        cudnn.benchmark = True
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+        model = nn.DataParallel(model).cuda()
     dataloader = train_dataloader2(args.data_dir, args.batch_size, args.num_worker)
     max_iter = len(dataloader)
     warmup_epochs = 1
