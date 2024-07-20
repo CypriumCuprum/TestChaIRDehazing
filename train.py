@@ -11,7 +11,7 @@ from warmup_scheduler import GradualWarmupScheduler
 
 
 def _train(model, args):
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     model.to(device)
     criterion = torch.nn.L1Loss()
 
